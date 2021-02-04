@@ -1,0 +1,8 @@
+{
+  "name": "Nvidia Power Management Indicator",
+  "description": "Show the realtime power status (active or suspended) of nvidia GPU. Laptop configured with nvidia dynamic power management may not easily tell whether the GPU is suspended or not.",
+  "uuid": "nvidia-pm-indicator@alkaid",
+  "shell-version": [
+    "3.38"
+  ]
+}
