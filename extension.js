@@ -57,21 +57,14 @@ class Indicator extends PanelMenu.Button {
         this.state = 'active';
         this.icon.set_gicon(this.activeIcon);
         box.add_child(this.icon);
-        // box.add_child(new St.Icon({
-        //     icon_name: 'face-smile-symbolic',
-        //     style_class: 'system-status-icon',
-        // }));
-        //box.add_child(PopupMenu.arrowIcon(St.Side.BOTTOM));
         this.add_child(box);
 
         this.statusLabel = new PopupMenu.PopupMenuItem(_(activeText));
-        // item.connect('activate', () => {
-        //     Main.notify(_('Whatʼs up, folks?'));
-        // });
         this.menu.addMenuItem(this.statusLabel);
         this._refresh();
         this.timeoutCB = Mainloop.timeout_add_seconds(30, Lang.bind(this, this._refresh));
     }
+    // _refresh() should return true to be continuously called by Mainloop
     _refresh() {
         let statefile = Gio.File.new_for_path(status_path);
         let state = ByteArray.toString(statefile.load_contents(null)[1]);
@@ -90,6 +83,7 @@ class Indicator extends PanelMenu.Button {
                 this.statusLabel.label.set_text(suspendText);
             }
         }
+        return true;
     }
 });
 
@@ -106,6 +100,7 @@ class Extension {
     }
 
     disable() {
+        Mainloop.source_remove(this._indicator.timeoutCB);
         this._indicator.destroy();
         this._indicator = null;
     }
